@@ -4,6 +4,7 @@ window.addEventListener('load', init);
 var canvas;
 var ctx;
 var cellMap;
+var autoId;
 
 var CELL_SIZE = 10;
 var SCREEN_WIDTH = 300;
@@ -42,6 +43,17 @@ function genarateCellRandom()
             if (rnd) cellMap.birthCell(x,y);
         }
     }
+}
+
+function auto()
+{
+    update();
+    autoId = setTimeout(auto,500);
+}
+
+function stopAuto()
+{
+    clearTimeout(autoId);
 }
 
 // çXêV
