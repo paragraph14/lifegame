@@ -4,8 +4,8 @@ window.addEventListener('load', init);
 var canvas;
 var ctx;
 
-var SCREEN_WIDTH = 1000;
-var SCREEN_HEIGHT = 1000;
+var SCREEN_WIDTH = 300;
+var SCREEN_HEIGHT = 300;
 
 
 function init()
@@ -19,7 +19,8 @@ function init()
     canvas.width = SCREEN_WIDTH
     canvas.height = SCREEN_HEIGHT
 
-    requestAnimationFrame(update);
+    render();
+    // requestAnimationFrame(update);
 }
 
 // 更新
@@ -34,6 +35,29 @@ function render()
 {
     // 全体をクリア
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    renderGrid();
+}
+
+function renderGrid()
+{
+    ctx.beginPath();
+    ctx.moveTo(100,0);
+    ctx.lineTo(100,300);
+    ctx.moveTo(200,0);
+    ctx.lineTo(200,300);
+
+    ctx.moveTo(0,100);
+    ctx.lineTo(300,100);
+    ctx.moveTo(0,200);
+    ctx.lineTo(300,200);
+
+    ctx.moveTo(0,0);
+    ctx.lineTo(0,300);
+    ctx.lineTo(300,300);
+    ctx.lineTo(300,0);
+    ctx.lineTo(0,0);
+
+    ctx.stroke();
 }
 
 Cell = function(x,y)
