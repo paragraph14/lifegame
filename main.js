@@ -3,9 +3,11 @@ window.addEventListener('load', init);
 
 var canvas;
 var ctx;
+var cellMap;
 
 var SCREEN_WIDTH = 300;
 var SCREEN_HEIGHT = 300;
+var CELL_MAP_SIZE = 3;
 
 
 function init()
@@ -19,14 +21,27 @@ function init()
     canvas.width = SCREEN_WIDTH
     canvas.height = SCREEN_HEIGHT
 
+    cellInit();
+
     render();
     // requestAnimationFrame(update);
+}
+
+function cellInit()
+{
+    cellMap = new CellMap(CELL_MAP_SIZE);
+    cellMap.birthCell(0,0);
+    cellMap.birthCell(1,0);
+    cellMap.birthCell(2,0);
+    cellMap.birthCell(1,1);
 }
 
 // 更新
 function update()
 {
-    requestAnimationFrame(update);
+    // requestAnimationFrame(update);
+    cellMap.decisionNextGeneration();
+    cellMap.goToNextGeneration();
     render();
 }
 
@@ -35,6 +50,7 @@ function render()
 {
     // 全体をクリア
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    renderCell();
     renderGrid();
 }
 
@@ -58,6 +74,27 @@ function renderGrid()
     ctx.lineTo(0,0);
 
     ctx.stroke();
+}
+
+function fillCell(x, y, state)
+{
+    var rectx = x*100;
+    var recty = y*100;
+
+    if(state) ctx.fillStyle = "#000000";
+    else ctx.fillStyle = "#ffffff"
+
+    ctx.fillRect(rectx, recty, rectx+100, recty+100);
+}
+
+function renderCell()
+{
+    var x,y;
+    for (x=0;x<CELL_MAP_SIZE;x++) {
+        for (y=0;y<CELL_MAP_SIZE;y++) {
+            fillCell(x, y, cellMap.getCellState(x,y));
+        }
+    }
 }
 
 Cell = function(x,y)

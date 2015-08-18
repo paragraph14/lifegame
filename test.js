@@ -74,10 +74,16 @@ function NextGeneration()
     assert(false, testMap.getCellState(2, 2));
 }
 
+function Fillcell()
+{
+    fillCell(0,0,false);
+}
+
 function TestMain()
 {
     CellBirthAndKill();
     MakeCellMap();
     CountAroundAliveCell();
     NextGeneration();
+    // Fillcell();
 }
