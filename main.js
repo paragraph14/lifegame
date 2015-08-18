@@ -5,10 +5,10 @@ var canvas;
 var ctx;
 var cellMap;
 
+var CELL_SIZE = 10;
 var SCREEN_WIDTH = 300;
-var SCREEN_HEIGHT = 300;
-var CELL_MAP_SIZE = 3;
-
+var SCREEN_HEIGHT = SCREEN_WIDTH;
+var CELL_MAP_SIZE = SCREEN_WIDTH/CELL_SIZE;
 
 function init()
 {
@@ -30,10 +30,18 @@ function init()
 function cellInit()
 {
     cellMap = new CellMap(CELL_MAP_SIZE);
-    cellMap.birthCell(0,0);
-    cellMap.birthCell(1,0);
-    cellMap.birthCell(2,0);
-    cellMap.birthCell(1,1);
+    genarateCellRandom();
+}
+
+function genarateCellRandom()
+{
+    var x,y,rnd;
+    for (x=0;x<CELL_MAP_SIZE;x++) {
+        for (y=0;y<CELL_MAP_SIZE;y++) {
+            rnd = Math.floor(Math.random()*2);
+            if (rnd) cellMap.birthCell(x,y);
+        }
+    }
 }
 
 // 更新
@@ -51,40 +59,17 @@ function render()
     // 全体をクリア
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     renderCell();
-    renderGrid();
-}
-
-function renderGrid()
-{
-    ctx.beginPath();
-    ctx.moveTo(100,0);
-    ctx.lineTo(100,300);
-    ctx.moveTo(200,0);
-    ctx.lineTo(200,300);
-
-    ctx.moveTo(0,100);
-    ctx.lineTo(300,100);
-    ctx.moveTo(0,200);
-    ctx.lineTo(300,200);
-
-    ctx.moveTo(0,0);
-    ctx.lineTo(0,300);
-    ctx.lineTo(300,300);
-    ctx.lineTo(300,0);
-    ctx.lineTo(0,0);
-
-    ctx.stroke();
 }
 
 function fillCell(x, y, state)
 {
-    var rectx = x*100;
-    var recty = y*100;
+    var rectx = x * CELL_SIZE;
+    var recty = y * CELL_SIZE;
 
     if(state) ctx.fillStyle = "#000000";
     else ctx.fillStyle = "#ffffff"
 
-    ctx.fillRect(rectx, recty, rectx+100, recty+100);
+    ctx.fillRect(rectx, recty, rectx+CELL_SIZE, recty+CELL_SIZE);
 }
 
 function renderCell()
