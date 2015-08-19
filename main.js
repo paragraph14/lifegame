@@ -7,25 +7,45 @@ var cellMap;
 var autoId;
 
 var CELL_SIZE = 10;
-var SCREEN_WIDTH = 300;
-var SCREEN_HEIGHT = SCREEN_WIDTH;
-var CELL_MAP_SIZE = SCREEN_WIDTH/CELL_SIZE;
+var SCREEN_SIZE = 500;
+var CELL_MAP_SIZE = SCREEN_SIZE/CELL_SIZE;
+var SPEED = 500;
 
 function init()
 {
     // HTML内のcanvasを取得
     canvas = document.getElementById('maincanvas');
+    // クリックイベントのイベントハンドラを追加
+    canvas.addEventListener('click', onClick, false);
     // 描画のためのコンテキストオブジェクトを取得
     ctx = canvas.getContext('2d');
 
     // サイズの設定
-    canvas.width = SCREEN_WIDTH
-    canvas.height = SCREEN_HEIGHT
+    canvas.width = SCREEN_SIZE
+    canvas.height = SCREEN_SIZE
 
     cellInit();
 
     render();
     // requestAnimationFrame(update);
+}
+
+function onClick(e)
+{
+    var rect = e.target.getBoundingClientRect();
+    var x = e.clientX - rect.left;
+    var y = e.clientY - rect.top;
+
+    reverseCell(x, y);
+    render()
+}
+
+function reverseCell(x, y)
+{
+    var basex = Math.floor(x/CELL_SIZE);
+    var basey = Math.floor(y/CELL_SIZE);
+
+    cellMap.reverseState(basex, basey);
 }
 
 function cellInit()
@@ -41,19 +61,49 @@ function genarateCellRandom()
         for (y=0;y<CELL_MAP_SIZE;y++) {
             rnd = Math.floor(Math.random()*2);
             if (rnd) cellMap.birthCell(x,y);
+            else cellMap.killCell(x,y);
         }
     }
+}
+
+function repositioningCell()
+{
+    genarateCellRandom();
+    render();
 }
 
 function auto()
 {
     update();
-    autoId = setTimeout(auto,500);
+    autoId = setTimeout(auto,SPEED);
+}
+
+function downSpeed()
+{
+    if(SPEED>999) return;
+    SPEED = SPEED + 100;
+}
+
+function upSpeed()
+{
+    if(SPEED<100) return;
+    SPEED = SPEED - 100;
 }
 
 function stopAuto()
 {
     clearTimeout(autoId);
+}
+
+function clear()
+{
+    var x,y;
+    for (x=0;x<CELL_MAP_SIZE;x++) {
+        for (y=0;y<CELL_MAP_SIZE;y++) {
+            cellMap.killCell(x,y);
+        }
+    }
+    render();
 }
 
 // 更新
@@ -104,6 +154,7 @@ Cell = function(x,y)
 
 Cell.prototype.kill = function() { this.state = false; }
 Cell.prototype.birth = function() { this.state = true; }
+Cell.prototype.reverse = function() { this.state = !this.state; }
 Cell.prototype.getState = function() { return this.state; }
 
 CellMap = function(mapSize)
@@ -143,14 +194,22 @@ CellMap.prototype.countAroundAliveCell = function(x, y)
     var count = 0;
     var curx,cury;
     for (curx=x-1;curx<=x+1;curx++){
-        if (!this.validateMapSize(curx,0)) continue;
+        // if (!this.validateMapSize(curx,0)) continue;
+        curx = exceedBoundary(curx)
         for (cury=y-1;cury<=y+1;cury++){
-            if (!this.validateMapSize(curx,cury)) continue;
+            // if (!this.validateMapSize(curx,cury)) continue;
+            cury = exceedBoundary(cury)
             if(this.cellArray[curx][cury].getState()) count++;
         }
     }
     if(this.cellArray[x][y].getState()) count--;
     return count;
+}
+
+function exceedBoundary(x)
+{
+    if(x<0) return SCREEN_SIZE;
+    if(x>=SCREEN_SIZE) return 0;
 }
 
 CellMap.prototype.decisionNextState = function(x, y)
@@ -162,6 +221,11 @@ CellMap.prototype.decisionNextState = function(x, y)
         this.cellArray[x][y].nextState = this.cellArray[x][y].state;
     else
         this.cellArray[x][y].nextState = false;
+}
+
+CellMap.prototype.reverseState = function(x, y)
+{
+    this.cellArray[x][y].reverse();
 }
 
 CellMap.prototype.decisionNextGeneration = function()
