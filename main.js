@@ -209,7 +209,8 @@ CellMap.prototype.countAroundAliveCell = function(x, y)
 function exceedBoundary(x)
 {
     if(x<0) return SCREEN_SIZE;
-    if(x>=SCREEN_SIZE) return 0;
+    else if(x>=SCREEN_SIZE) return 0;
+    else return x
 }
 
 CellMap.prototype.decisionNextState = function(x, y)
