@@ -4,12 +4,14 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Life game</title>
-<script src="lifegame.js"></script>
+<script src="lifegame_core.js"></script>
+<script src="lifegame_render.js"></script>
+<script src="lifegame_interface.js"></script>
 </head>
 <body>
 <p>
 <form name="buttons">
-<input type="button" name="next" value="next" onClick="update()">
+<input type="button" name="next" value="next" onClick="next()">
 <input type="button" name="start" value="start" onClick="auto()">
 <input type="button" name="stop" value="stop" onClick="stopAuto()">
 <input type="button" name="random" value="random" onClick="repositioningCell()">
