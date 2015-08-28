@@ -30,6 +30,8 @@ function init()
     // requestAnimationFrame(update);
 }
 
+//// ボタン関数 /////
+
 function onClick(e)
 {
     var rect = e.target.getBoundingClientRect();
@@ -105,6 +107,7 @@ function clear()
     }
     render();
 }
+///////////////////////////////////////////
 
 // 更新
 function update()
@@ -123,6 +126,7 @@ function render()
     renderCell();
 }
 
+// セル座標と状態を指定するとそのように画面を塗る
 function fillCell(x, y, state)
 {
     var rectx = x * CELL_SIZE;
@@ -134,6 +138,7 @@ function fillCell(x, y, state)
     ctx.fillRect(rectx, recty, rectx+CELL_SIZE, recty+CELL_SIZE);
 }
 
+// セルマップに従って描画
 function renderCell()
 {
     var x,y;
@@ -171,6 +176,7 @@ CellMap = function(mapSize)
     }
 }
 
+// 与えられた座標がセルマップ内かどうかを判定
 CellMap.prototype.validateMapSize = function(x, y)
 {
     if(x<0) return false;
@@ -189,6 +195,7 @@ CellMap.prototype.getCellState = function(x, y)
 CellMap.prototype.killCell = function(x, y) { this.cellArray[x][y].state = false; }
 CellMap.prototype.birthCell = function(x, y) { this.cellArray[x][y].state = true; }
 
+// セル座標を与えるとその周囲にいくつ生存しているセルがあるか返す
 CellMap.prototype.countAroundAliveCell = function(x, y)
 {
     var count = 0;
@@ -206,13 +213,15 @@ CellMap.prototype.countAroundAliveCell = function(x, y)
     return count;
 }
 
+// 端の処理
 function exceedBoundary(x)
 {
-    if(x<0) return SCREEN_SIZE;
-    else if(x>=SCREEN_SIZE) return 0;
+    if(x<0) return 49 ;
+    else if(x>=50) return 0;
     else return x
 }
 
+// セルマップ内の指定したセルの次の状態を決定する
 CellMap.prototype.decisionNextState = function(x, y)
 {
     var count = this.countAroundAliveCell(x,y);
@@ -224,11 +233,14 @@ CellMap.prototype.decisionNextState = function(x, y)
         this.cellArray[x][y].nextState = false;
 }
 
+// 指定したセルの状態を反転
 CellMap.prototype.reverseState = function(x, y)
 {
     this.cellArray[x][y].reverse();
 }
 
+// 全てのセルの次の状態を決定する
+// 移行はまだしない
 CellMap.prototype.decisionNextGeneration = function()
 {
     var x,y;
@@ -239,6 +251,7 @@ CellMap.prototype.decisionNextGeneration = function()
     }
 }
 
+// 全てのセルを次の状態に移行させる
 CellMap.prototype.goToNextGeneration = function()
 {
     var x,y;
