@@ -60,10 +60,10 @@ var CellMap = {
             var count = 0;
             var curx,cury;
 
-            var right_x = exceedBoundary(x+1);
-            var left_x  = exceedBoundary(x-1);
-            var up_y    = exceedBoundary(y-1);
-            var down_y  = exceedBoundary(y+1);
+            var right_x = this.exceedBoundary(x+1);
+            var left_x  = this.exceedBoundary(x-1);
+            var up_y    = this.exceedBoundary(y-1);
+            var down_y  = this.exceedBoundary(y+1);
 
             if (this.cellArray[left_x ][up_y  ].getState()) count++;
             if (this.cellArray[x      ][up_y  ].getState()) count++;
