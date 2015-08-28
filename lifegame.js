@@ -200,24 +200,28 @@ CellMap.prototype.countAroundAliveCell = function(x, y)
 {
     var count = 0;
     var curx,cury;
-    for (curx=x-1;curx<=x+1;curx++){
-        // if (!this.validateMapSize(curx,0)) continue;
-        curx = exceedBoundary(curx)
-        for (cury=y-1;cury<=y+1;cury++){
-            // if (!this.validateMapSize(curx,cury)) continue;
-            cury = exceedBoundary(cury)
-            if(this.cellArray[curx][cury].getState()) count++;
-        }
-    }
-    if(this.cellArray[x][y].getState()) count--;
+
+    var right_x = exceedBoundary(x+1);
+    var left_x  = exceedBoundary(x-1);
+    var up_y    = exceedBoundary(y-1);
+    var down_y  = exceedBoundary(y+1);
+
+    if (this.cellArray[left_x ][up_y  ].getState()) count++;
+    if (this.cellArray[x      ][up_y  ].getState()) count++;
+    if (this.cellArray[right_x][up_y  ].getState()) count++;
+    if (this.cellArray[left_x ][y     ].getState()) count++;
+    if (this.cellArray[right_x][y     ].getState()) count++;
+    if (this.cellArray[left_x ][down_y].getState()) count++;
+    if (this.cellArray[x      ][down_y].getState()) count++;
+    if (this.cellArray[right_x][down_y].getState()) count++;
     return count;
 }
 
 // ’[‚Ìˆ—
 function exceedBoundary(x)
 {
-    if(x<0) return 49 ;
-    else if(x>=50) return 0;
+    if(x<0) return cellMap.mapSize-1 ;
+    else if(x>=cellMap.mapSize) return 0;
     else return x
 }
 
