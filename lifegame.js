@@ -149,18 +149,24 @@ function renderCell()
     }
 }
 
-Cell = function(x,y)
-{
-    this.x = x;
-    this.y = y;
-    this.state = false;
-    this.nextState = false;
+var Cell = {
+    // オブジェクトのメンバを書く
+    create(x, y){
+        var self = Object.create(Cell.prototype);
+        self.x = x;
+        self.y = y;
+        self.state = false;
+        self.nextState = false;
+        return self;
+    },
+    // プロトタイプのメンバ
+    prototype: {
+        kill()     { this.state = false; },
+        birth()    { this.state = true; },
+        reverse()  { this.state = !this.state; },
+        getState() { return this.state; }
+    }
 }
-
-Cell.prototype.kill = function() { this.state = false; }
-Cell.prototype.birth = function() { this.state = true; }
-Cell.prototype.reverse = function() { this.state = !this.state; }
-Cell.prototype.getState = function() { return this.state; }
 
 CellMap = function(mapSize)
 {
@@ -171,7 +177,7 @@ CellMap = function(mapSize)
     for (x=0;x<this.mapSize;x++) {
         this.cellArray[x]=[];
         for (y=0;y<this.mapSize;y++) {
-            this.cellArray[x][y] = new Cell(x,y);
+            this.cellArray[x][y] = Cell.create(x, y);
         }
     }
 }
