@@ -21,7 +21,7 @@ function stopAuto()
     clearTimeout(autoId);
 }
 
-function clear()
+function cellClear()
 {
     var x,y;
     for (x=0;x<CELL_MAP_SIZE;x++) {
