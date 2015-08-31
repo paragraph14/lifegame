@@ -4,7 +4,6 @@ window.addEventListener('load', init);
 var canvas;
 var ctx;
 var cellMap;
-var autoId;
 
 var CELL_SIZE = 10;
 var SCREEN_SIZE = 500;

@@ -1,3 +1,5 @@
+var autoId;
+
 function auto()
 {
     update();
@@ -16,8 +18,15 @@ function upSpeed()
     SPEED = SPEED - 100;
 }
 
+function startAuto()
+{
+    if (autoId) return;
+    auto();
+}
+
 function stopAuto()
 {
+    if (!autoId) return;
     clearTimeout(autoId);
 }
 
@@ -32,7 +41,7 @@ function cellClear()
     render();
 }
 
-function next()
+function nextGene()
 {
     update();
 }
