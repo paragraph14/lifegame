@@ -1,4 +1,4 @@
-var autoId;
+var autoId = 0;
 
 function auto()
 {
@@ -28,6 +28,7 @@ function stopAuto()
 {
     if (!autoId) return;
     clearTimeout(autoId);
+    autoId = 0;
 }
 
 function cellClear()
